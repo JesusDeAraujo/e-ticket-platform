@@ -31,8 +31,13 @@ services:
             - "27017:27017"
 
     # Broker para Comunicación (Redis)
-    redis_broker:
+    redis:
         image: redis:alpine
         restart: always
         ports:
             - "6379:6379"
+
+volumes:
+    postgres_auth_data:
+    postgres_res_data:
+    mongo_events_data:
