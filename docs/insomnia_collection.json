@@ -1,0 +1,138 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: "Colección Insomnia: Auth"
+meta:
+  id: wrk_309ac788ccaa4d79bbcaf29e8b1b2853
+  created: 1778193694873
+  modified: 1778290524597
+  description: ""
+collection:
+  - url: "{{ _.base_url }}/api/register/"
+    name: POST Registro
+    meta:
+      id: req_2ba09b3b90d646daa4451213cb27c114
+      created: 1778193694880
+      modified: 1778289687196
+      isPrivate: false
+      description: ""
+      sortKey: -1778194275186
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "email": "jesus@test.com",
+        "password": "password123",
+        "first_name": "Jesús",
+        "last_name": "De Araujo"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/api/me/"
+    name: GET Perfil
+    meta:
+      id: req_4a5ed8ec8ff745708f562cf11ed36c62
+      created: 1778194272566
+      modified: 1778290325312
+      isPrivate: false
+      description: ""
+      sortKey: -1778194272566
+    method: GET
+    body:
+      mimeType: application/json
+      text: ""
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{% response 'body', 'req_5e4add57d05148949a1c72e3c3699302',
+        'b64::JC5hY2Nlc3M=::46b', 'always', 60 %}"
+      prefix: Bearer
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: "{{ _.base_url }}/api/login/"
+    name: POST Login
+    meta:
+      id: req_5e4add57d05148949a1c72e3c3699302
+      created: 1778194275086
+      modified: 1778289691915
+      isPrivate: false
+      description: ""
+      sortKey: -1778194275086
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        "email": "jesus@test.com",
+        "password": "password123"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.5.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_63a500f507ddf9a24ae6913264cb3b1a8c9aeb3a
+    created: 1778193694875
+    modified: 1778193694875
+environments:
+  name: Base Environment
+  meta:
+    id: env_63a500f507ddf9a24ae6913264cb3b1a8c9aeb3a
+    created: 1778193694874
+    modified: 1778193791388
+    isPrivate: false
+  data:
+    base_url: http://localhost:3000/auth
+    access_token: ""
+    refresh_token: ""
+  subEnvironments:
+    - name: "Sprint 1: Auth"
+      meta:
+        id: env_8865cd5226d948c489a3ed1a9a5099ac
+        created: 1778193738903
+        modified: 1778290643737
+        isPrivate: false
+        sortKey: 1778193738903
+      data:
+        base_url: http://localhost:3000/auth
+        access_token: ""
+        refresh_token: ""
+      color: "#3c52fb"
