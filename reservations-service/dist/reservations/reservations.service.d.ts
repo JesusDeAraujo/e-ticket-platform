@@ -1,9 +1,10 @@
+import { DataSource, Repository } from 'typeorm';
+import { Reservation } from './entities/reservation.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 export declare class ReservationsService {
-    create(createReservationDto: CreateReservationDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, updateReservationDto: UpdateReservationDto): string;
-    remove(id: number): string;
+    private readonly reservationRepository;
+    private readonly dataSource;
+    constructor(reservationRepository: Repository<Reservation>, dataSource: DataSource);
+    create(createReservationDto: CreateReservationDto, userId: string): Promise<Reservation>;
+    findAll(): Promise<Reservation[]>;
 }

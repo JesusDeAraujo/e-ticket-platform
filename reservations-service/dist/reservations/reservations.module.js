@@ -9,19 +9,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReservationsModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const passport_1 = require("@nestjs/passport");
+const jwt_1 = require("@nestjs/jwt");
 const reservations_service_1 = require("./reservations.service");
 const reservations_controller_1 = require("./reservations.controller");
 const reservation_entity_1 = require("./entities/reservation.entity");
+const event_stock_entity_1 = require("./entities/event-stock.entity");
+const jwt_strategy_1 = require("./strategies/jwt.strategy");
 let ReservationsModule = class ReservationsModule {
 };
 exports.ReservationsModule = ReservationsModule;
 exports.ReservationsModule = ReservationsModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([reservation_entity_1.Reservation]),
+            typeorm_1.TypeOrmModule.forFeature([reservation_entity_1.Reservation, event_stock_entity_1.EventStock]),
+            passport_1.PassportModule.register({ defaultStrategy: 'jwt' }),
+            jwt_1.JwtModule.register({
+                secret: process.env.JWT_SECRET || 'clave-por-defecto-baja-seguridad',
+                signOptions: { expiresIn: '1d' },
+            }),
         ],
         controllers: [reservations_controller_1.ReservationsController],
-        providers: [reservations_service_1.ReservationsService],
+        providers: [reservations_service_1.ReservationsService, jwt_strategy_1.JwtStrategy],
     })
 ], ReservationsModule);
 //# sourceMappingURL=reservations.module.js.map

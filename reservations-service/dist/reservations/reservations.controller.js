@@ -16,66 +16,53 @@ exports.ReservationsController = void 0;
 const common_1 = require("@nestjs/common");
 const reservations_service_1 = require("./reservations.service");
 const create_reservation_dto_1 = require("./dto/create-reservation.dto");
-const update_reservation_dto_1 = require("./dto/update-reservation.dto");
+const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
 let ReservationsController = class ReservationsController {
     reservationsService;
     constructor(reservationsService) {
         this.reservationsService = reservationsService;
     }
-    create(createReservationDto) {
-        return this.reservationsService.create(createReservationDto);
+    async create(createReservationDto, req) {
+        const userId = req.user.userId;
+        return this.reservationsService.create(createReservationDto, userId);
     }
     findAll() {
         return this.reservationsService.findAll();
     }
-    findOne(id) {
-        return this.reservationsService.findOne(+id);
-    }
-    update(id, updateReservationDto) {
-        return this.reservationsService.update(+id, updateReservationDto);
-    }
-    remove(id) {
-        return this.reservationsService.remove(+id);
+    async seedStock(body) {
+        const { eventId, stock } = body;
+        const entityManager = this.reservationsService['dataSource'].manager;
+        const newStock = entityManager.create('EventStock', { eventId, stock });
+        await entityManager.save('EventStock', newStock);
+        return { message: `Stock de ${stock} unidades registrado para el evento ${eventId}` };
     }
 };
 exports.ReservationsController = ReservationsController;
 __decorate([
     (0, common_1.Post)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_reservation_dto_1.CreateReservationDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [create_reservation_dto_1.CreateReservationDto, Object]),
+    __metadata("design:returntype", Promise)
 ], ReservationsController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], ReservationsController.prototype, "findAll", null);
 __decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Post)('seed-stock'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], ReservationsController.prototype, "findOne", null);
-__decorate([
-    (0, common_1.Patch)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_reservation_dto_1.UpdateReservationDto]),
-    __metadata("design:returntype", void 0)
-], ReservationsController.prototype, "update", null);
-__decorate([
-    (0, common_1.Delete)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], ReservationsController.prototype, "remove", null);
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ReservationsController.prototype, "seedStock", null);
 exports.ReservationsController = ReservationsController = __decorate([
-    (0, common_1.Controller)('reservations'),
+    (0, common_1.Controller)(),
     __metadata("design:paramtypes", [reservations_service_1.ReservationsService])
 ], ReservationsController);
 //# sourceMappingURL=reservations.controller.js.map

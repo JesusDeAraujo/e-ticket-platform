@@ -1,26 +1,71 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
+import { Reservation } from './entities/reservation.entity';
+import { EventStock } from './entities/event-stock.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
-import { UpdateReservationDto } from './dto/update-reservation.dto';
 
 @Injectable()
 export class ReservationsService {
-  create(createReservationDto: CreateReservationDto) {
-    return 'This action adds a new reservation';
+  constructor(
+    @InjectRepository(Reservation)
+    private readonly reservationRepository: Repository<Reservation>,
+    private readonly dataSource: DataSource,
+  ) {}
+
+  async create(createReservationDto: CreateReservationDto, userId: string): Promise<Reservation> {
+    const { eventId, quantity } = createReservationDto;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const eventStock = await queryRunner.manager
+        .createQueryBuilder(EventStock, 'eventStock')
+        .setLock('pessimistic_write') 
+        .where('eventStock.eventId = :eventId', { eventId })
+        .getOne();
+
+      if (!eventStock) {
+        throw new NotFoundException('El evento especificado no existe en el registro de inventario.');
+      }
+
+      if (eventStock.stock < quantity) {
+        throw new BadRequestException(
+          `Inventario insuficiente. Quedan ${eventStock.stock} entradas disponibles y solicitaste ${quantity}.`
+        );
+      }
+
+      eventStock.stock -= quantity;
+      await queryRunner.manager.save(eventStock);
+
+      // por ahora dejamos un precio fijo TODO: calcularlo dinamicamente
+      const pricePerTicket = 50.00; 
+      const totalPrice = pricePerTicket * quantity;
+
+      const newReservation = queryRunner.manager.create(Reservation, {
+        userId,
+        eventId,
+        quantity,
+        totalPrice,
+        status: 'CONFIRMED',
+      });
+
+      const savedReservation = await queryRunner.manager.save(newReservation);
+
+      await queryRunner.commitTransaction();
+      return savedReservation;
+
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   }
 
-  findAll() {
-    return `This action returns all reservations`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} reservation`;
-  }
-
-  update(id: number, updateReservationDto: UpdateReservationDto) {
-    return `This action updates a #${id} reservation`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} reservation`;
+  async findAll(): Promise<Reservation[]> {
+    return this.reservationRepository.find();
   }
 }
