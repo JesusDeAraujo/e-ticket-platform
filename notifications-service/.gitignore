@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.installed.cfg
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# Entornos Virtuales
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+*.log
+
+# Configuraciones de IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variables de entorno
+.env
+.flaskenv
+.secret_key
