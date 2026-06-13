@@ -7,6 +7,7 @@ import { ReservationsController } from './reservations.controller';
 import { Reservation } from './entities/reservation.entity';
 import { EventStock } from './entities/event-stock.entity';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import Redis from 'ioredis';
 
 @Module({
   imports: [
@@ -18,6 +19,17 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     }),
   ],
   controllers: [ReservationsController],
-  providers: [ReservationsService, JwtStrategy],
+  providers: [ReservationsService, JwtStrategy,
+    {
+      provide: 'REDIS_CLIENT',
+      useFactory: () => {
+        return new Redis({
+          host: process.env.REDIS_HOST || 'localhost',
+          port: Number(process.env.REDIS_PORT || '6379'),
+        })
+      }
+    }
+  ],
+  exports: ['REDIS_CLIENT'],
 })
 export class ReservationsModule {}

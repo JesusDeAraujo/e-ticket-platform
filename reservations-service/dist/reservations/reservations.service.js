@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ReservationsService = void 0;
 const common_1 = require("@nestjs/common");
@@ -18,12 +21,15 @@ const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const reservation_entity_1 = require("./entities/reservation.entity");
 const event_stock_entity_1 = require("./entities/event-stock.entity");
+const ioredis_1 = __importDefault(require("ioredis"));
 let ReservationsService = class ReservationsService {
     reservationRepository;
     dataSource;
-    constructor(reservationRepository, dataSource) {
+    redisClient;
+    constructor(reservationRepository, dataSource, redisClient) {
         this.reservationRepository = reservationRepository;
         this.dataSource = dataSource;
+        this.redisClient = redisClient;
     }
     async create(createReservationDto, userId) {
         const { eventId, quantity } = createReservationDto;
@@ -55,6 +61,20 @@ let ReservationsService = class ReservationsService {
             });
             const savedReservation = await queryRunner.manager.save(newReservation);
             await queryRunner.commitTransaction();
+            try {
+                const eventPayLoad = {
+                    userId: savedReservation.userId,
+                    eventId: savedReservation.eventId,
+                    quantity: savedReservation.quantity,
+                    reservationId: savedReservation.id,
+                    totalPrice: savedReservation.totalPrice,
+                };
+                await this.redisClient.publish('order_created', JSON.stringify(eventPayLoad));
+                console.log(` [Evento Emitido] Orden ${savedReservation.id} publicada en Redis.`);
+            }
+            catch (redisError) {
+                console.error('Error al publicar el evento en Redis:', redisError);
+            }
             return savedReservation;
         }
         catch (error) {
@@ -73,7 +93,9 @@ exports.ReservationsService = ReservationsService;
 exports.ReservationsService = ReservationsService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(reservation_entity_1.Reservation)),
+    __param(2, (0, common_1.Inject)('REDIS_CLIENT')),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.DataSource])
+        typeorm_2.DataSource,
+        ioredis_1.default])
 ], ReservationsService);
 //# sourceMappingURL=reservations.service.js.map

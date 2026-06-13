@@ -1,9 +1,10 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, Inject } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { EventStock } from './entities/event-stock.entity';
 import { CreateReservationDto } from './dto/create-reservation.dto';
+import Redis from 'ioredis';
 
 @Injectable()
 export class ReservationsService {
@@ -11,6 +12,7 @@ export class ReservationsService {
     @InjectRepository(Reservation)
     private readonly reservationRepository: Repository<Reservation>,
     private readonly dataSource: DataSource,
+    @Inject('REDIS_CLIENT') private readonly redisClient: Redis
   ) {}
 
   async create(createReservationDto: CreateReservationDto, userId: string): Promise<Reservation> {
@@ -55,6 +57,20 @@ export class ReservationsService {
       const savedReservation = await queryRunner.manager.save(newReservation);
 
       await queryRunner.commitTransaction();
+      try {
+        const eventPayLoad = {
+          userId: savedReservation.userId,
+          eventId: savedReservation.eventId,
+          quantity: savedReservation.quantity,
+          reservationId: savedReservation.id,
+          totalPrice: savedReservation.totalPrice,
+        };
+        await this.redisClient.publish('order_created', JSON.stringify(eventPayLoad));
+        console.log(` [Evento Emitido] Orden ${savedReservation.id} publicada en Redis.`);
+      } catch (redisError) {
+        console.error('Error al publicar el evento en Redis:', redisError);
+      }
+
       return savedReservation;
 
     } catch (error) {
