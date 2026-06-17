@@ -20,26 +20,6 @@ async function bootstrap() {
     }),
   );
 
-//Proxy para el microservicio de eventos
-  const eventsServiceUrl = configService.get<string>('EVENTS_SERVICE_URL');
-  app.use(
-    '/events',
-    createProxyMiddleware({
-      target: eventsServiceUrl,
-      changeOrigin: true,
-    }),
-  );
-
-//Proxy para el microservicio de reservas
-  const reservationsServiceUrl = configService.get<string>('RESERVATIONS_SERVICE_URL');
-  app.use(
-    '/reservations',
-    createProxyMiddleware({
-      target: reservationsServiceUrl,
-      changeOrigin: true,
-    }),
-  );
-
   app.use(helmet());
   app.enableCors();
 

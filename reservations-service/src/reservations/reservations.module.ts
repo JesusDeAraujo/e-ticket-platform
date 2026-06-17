@@ -14,7 +14,7 @@ import Redis from 'ioredis';
     TypeOrmModule.forFeature([Reservation, EventStock]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
-      secret: process.env.JWT_SECRET || 'clave-por-defecto-baja-seguridad',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1d' },
     }),
   ],

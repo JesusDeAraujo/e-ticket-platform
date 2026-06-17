@@ -9,7 +9,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         fields = ('email', 'first_name', 'last_name', 'password')
 
     def create(self, validated_data):
-        # Usamos el método que creamos en el UserManager para encriptar la clave
         user = User.objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
