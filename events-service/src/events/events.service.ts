@@ -17,5 +17,5 @@ export class EventsService {
   findOne(id: string) {
     return this.repository.findOne(id);
   }
-//TODO: por el momento no implementamos actualizaciones y borrados de eventos
 }
+//No implementamos metodos para borrar y actualizar
