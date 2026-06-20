@@ -30,7 +30,7 @@ export class AppModule implements NestModule {
       },
     })
   )
-  .forRoutes('events', 'events/(.*)');
+  .forRoutes('events', 'events/*path');
 
     consumer
       .apply(
@@ -43,6 +43,6 @@ export class AppModule implements NestModule {
           },
         })
       )
-      .forRoutes('reservations' , 'reservations/(.*)');
+      .forRoutes('reservations' , 'reservations/*path');
   }
 }

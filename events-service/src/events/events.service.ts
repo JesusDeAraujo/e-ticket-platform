@@ -1,13 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { CreateEventDto } from './dto/create-event.dto';
 import { EventsRepository } from './events.repository';
 
 @Injectable()
 export class EventsService {
-  constructor(private readonly repository: EventsRepository) {}
+  constructor(
+    private readonly repository: EventsRepository,
+    @Inject('REDIS_SERVICE') private readonly redisClient: ClientProxy,
+  ) {}
 
-  create(createEventDto: CreateEventDto) {
-    return this.repository.create(createEventDto);
+  async create(createEventDto: CreateEventDto) {
+    const newEvent = await this.repository.create(createEventDto);
+    this.redisClient.emit('event_created', {
+      eventId: newEvent._id.toString(),
+      title: newEvent.title,
+      price: newEvent.price,
+      stock: createEventDto.stock || 100,
+    });
+    return newEvent;
   }
 
   findAll() {

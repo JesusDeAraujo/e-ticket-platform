@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { EventPattern, Payload } from '@nestjs/microservices';
 
 @Controller()
 export class ReservationsController {
@@ -18,9 +19,20 @@ export class ReservationsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard) //Comentar para poder hacer pruebas sin autenticación
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.reservationsService.findAll();
+  }
+
+//Escucha automatica de Redis
+  @EventPattern('event_created')
+  async handleEventCreated(@Payload() data: { eventId: string; stock: number, title: string, price: number }) {
+    const { eventId, stock, title, price } = data;
+    const entityManager = this.reservationsService['dataSource'].manager;
+    const newStock = entityManager.create('EventStock', { eventId, stock, title, price });
+    await entityManager.save('EventStock', newStock);
+    
+    console.log(`[Redis] Sincronizado automáticamente en PostgreSQL: Evento ${eventId} con stock ${stock}`);
   }
 
   //ENDPOINT TEMPORAL PARA PRUEBAS LOCALES

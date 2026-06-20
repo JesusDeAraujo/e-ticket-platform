@@ -1,0 +1,170 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Flujo
+meta:
+  id: wrk_2390d5b4cfb746e0a82612c4762c8e69
+  created: 1781828084075
+  modified: 1781828084075
+  description: ""
+collection:
+  - name: "Flujo Completo: Compra de Boletos"
+    meta:
+      id: fld_c887d0cbfef2482f97560407cffd4284
+      created: 1781828099106
+      modified: 1781840074282
+      sortKey: -1781828099106
+      description: ""
+    children:
+      - url: "{{ _.base_url }}/events"
+        name: GET - Buscar Eventos Disponibles (PUBLICO)
+        meta:
+          id: req_583ba8c7b4194399adf89be4ed190810
+          created: 1781828126432
+          modified: 1781934468883
+          isPrivate: false
+          description: ""
+          sortKey: -1781828164466
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/reservations/"
+        name: GET - Validación / Verificación de la Reserva
+        meta:
+          id: req_0c8f89d9dbb640b6b4bd5306ffb815ed
+          created: 1781828160864
+          modified: 1781934494617
+          isPrivate: false
+          description: ""
+          sortKey: -1781828160864
+        method: GET
+        authentication:
+          type: bearer
+          token: "{% response 'body', 'req_3a09e8e48b704252bf818a6486494228',
+            'b64::JC5hY2Nlc3M=::46b', 'never', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/reservations/"
+        name: POST - Reservar entrada (Crear Reserva)
+        meta:
+          id: req_3b5fdac19ed740c0aad3e96610c3a495
+          created: 1781828163157
+          modified: 1781934764698
+          isPrivate: false
+          description: ""
+          sortKey: -1781828163157
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"eventId" : "6a362a91ea1b6afe2b1a2596",
+            	"quantity" : 1
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          disabled: false
+          token: "{% response 'body', 'req_3a09e8e48b704252bf818a6486494228',
+            'b64::JC5hY2Nlc3M=::46b', 'never', 60 %}"
+          prefix: ""
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/auth/api/login/"
+        name: POST - Autenticación (Obtener Token)
+        meta:
+          id: req_3a09e8e48b704252bf818a6486494228
+          created: 1781828164366
+          modified: 1781934479208
+          isPrivate: false
+          description: ""
+          sortKey: -1781828164441
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            "email": "jesus@test.com",
+            "password": "password123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/events"
+        name: POST - Crear Eventos
+        meta:
+          id: req_e12ce75c007843eb830e865c1bc83fc1
+          created: 1781933554264
+          modified: 1781934736124
+          isPrivate: false
+          description: ""
+          sortKey: -1781828164416
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "title": "Prueba de flujo",
+              "date": "2026-06-22",
+              "price": 88,
+              "stock": 2
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          type: bearer
+          disabled: false
+          token: "{% response 'body', 'req_3a09e8e48b704252bf818a6486494228',
+            'b64::JC5hY2Nlc3M=::46b', 'never', 60 %}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_cce11217ea2725226470378e814a5830af043499
+    created: 1781828084079
+    modified: 1781828084079
+environments:
+  name: Base Environment
+  meta:
+    id: env_cce11217ea2725226470378e814a5830af043499
+    created: 1781828084077
+    modified: 1781909198471
+    isPrivate: false
+  data:
+    base_url: http://localhost:3000
+    jwt_token: ""

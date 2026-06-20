@@ -42,8 +42,7 @@ export class ReservationsService {
       eventStock.stock -= quantity;
       await queryRunner.manager.save(eventStock);
 
-      // por ahora dejamos un precio fijo TODO: calcularlo dinamicamente
-      const pricePerTicket = 50.00; 
+      const pricePerTicket = eventStock.price; 
       const totalPrice = pricePerTicket * quantity;
 
       const newReservation = queryRunner.manager.create(Reservation, {
@@ -81,7 +80,21 @@ export class ReservationsService {
     }
   }
 
-  async findAll(): Promise<Reservation[]> {
-    return this.reservationRepository.find();
+  async findAll(): Promise<any[]> {
+  return this.reservationRepository
+    .createQueryBuilder('reservation')
+    .leftJoinAndSelect(EventStock, 'eventStock', 'eventStock.eventId = reservation.eventId')
+    .select([
+      'reservation.id AS "id"',
+      'reservation.userId AS "userId"',
+      'reservation.eventId AS "eventId"',
+      'eventStock.title AS "eventName"',
+      'reservation.quantity AS "quantity"',
+      'reservation.totalPrice AS "totalPrice"',
+      'reservation.status AS "status"',
+      'reservation.createdAt AS "createdAt"',
+      'reservation.updatedAt AS "updatedAt"',
+    ])
+    .getRawMany();
   }
 }
