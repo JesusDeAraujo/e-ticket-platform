@@ -6,3 +6,7 @@ from django.http import HttpResponse
 def hello_world(request):
     return HttpResponse("<h1>Hello world!</h1>")
 
+# Vista creada para verificar el funcionamiento del middleware
+def test_error(request):
+    resultado = 1 / 0 
+    return HttpResponse("No se verá")

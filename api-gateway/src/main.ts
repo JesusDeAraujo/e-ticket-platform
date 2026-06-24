@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 import { ConfigService } from '@nestjs/config';
+import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,6 +31,9 @@ async function bootstrap() {
       message: 'Limite de peticiones superado, intenta nuevamente mas tarde',
     }),
   );
+
+
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const port = configService.get<number>('PORT') || 3000;
   await app.listen(port);
