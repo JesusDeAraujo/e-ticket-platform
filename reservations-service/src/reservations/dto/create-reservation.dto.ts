@@ -1,12 +1,11 @@
-import { IsMongoId, IsString, IsNumber, Min, IsNotEmpty } from 'class-validator';
+import { IsString, IsNotEmpty, IsInt, Min, MaxLength, IsMongoId } from 'class-validator';
 
 export class CreateReservationDto {
-    @IsNotEmpty()
-    //@IsMongoId() 
-    @IsString() //Usamos temporalmente @IsString para poder hacer las pruebas rapidas 
+    @IsMongoId({ message: 'El ID del evento es incorrecto.' })
+    @IsNotEmpty({ message: 'El ID del evento es requerido.' })
     readonly eventId!: string;
 
-    @IsNumber()
-    @Min(1, { message: 'Debes reservar al menos 1 ticket' })
-    readonly quantity!: number
+    @IsInt({ message: 'La cantidad de boletos debe ser un número entero.' })
+    @Min(1, { message: 'Debes reservar al menos 1 boleto.' })
+    readonly quantity!: number;
 }

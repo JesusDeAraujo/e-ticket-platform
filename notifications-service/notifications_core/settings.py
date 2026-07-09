@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'notifications_core.middlewares.GlobalExceptionMiddleware',
+    'notifications_core.middleware.GlobalExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'notifications_core.urls'
