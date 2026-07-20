@@ -1,0 +1,9 @@
+[run]
+omit =
+    manage.py
+    notifications_core/*
+    */migrations/*
+    */venv/*
+    receiver/views.py
+    receiver/models.py
+    receiver/admin.py

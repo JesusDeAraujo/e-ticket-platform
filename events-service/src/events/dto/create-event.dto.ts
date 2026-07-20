@@ -1,5 +1,5 @@
 import { IsString, IsNotEmpty, IsDateString, IsNumber, Min, IsOptional, MaxLength, IsInt } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import sanitizeHtml from 'sanitize-html';
 
 export class CreateEventDto {
@@ -18,6 +18,7 @@ export class CreateEventDto {
 
     @IsDateString({}, { message: 'El formato de la fecha debe ser YYYY-MM-DD' })
     @IsNotEmpty({ message: 'La fecha es de caracter obligatorio' })
+    @Type(() => Date)
     readonly date!: Date;
 
     @IsNumber({}, { message: 'El precio debe ser un número.' })

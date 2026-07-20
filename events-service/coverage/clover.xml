@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1784578371668" clover="3.2.0">
+  <project timestamp="1784578371668" name="All files">
+    <metrics statements="45" coveredstatements="42" conditionals="28" coveredconditionals="20" methods="12" coveredmethods="10" elements="85" coveredelements="72" complexity="0" loc="45" ncloc="45" packages="2" files="4" classes="4"/>
+    <package name="events">
+      <metrics statements="36" coveredstatements="33" conditionals="24" coveredconditionals="17" methods="12" coveredmethods="10"/>
+      <file name="events.controller.ts" path="C:\Users\Jesús De Araujo\Desktop\Programacion Backend\Proyectos\e-ticket-platform\events-service\src\events\events.controller.ts">
+        <metrics statements="12" coveredstatements="10" conditionals="8" coveredconditionals="6" methods="4" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="2" type="cond" truecount="3" falsecount="1"/>
+        <line num="12" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="0" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
+      </file>
+      <file name="events.repository.ts" path="C:\Users\Jesús De Araujo\Desktop\Programacion Backend\Proyectos\e-ticket-platform\events-service\src\events\events.repository.ts">
+        <metrics statements="13" coveredstatements="12" conditionals="6" coveredconditionals="4" methods="4" coveredmethods="4"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
+        <line num="4" count="3" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="3" falsecount="1"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="23" count="0" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+      </file>
+      <file name="events.service.ts" path="C:\Users\Jesús De Araujo\Desktop\Programacion Backend\Proyectos\e-ticket-platform\events-service\src\events\events.service.ts">
+        <metrics statements="11" coveredstatements="11" conditionals="10" coveredconditionals="7" methods="4" coveredmethods="4"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="6" falsecount="2"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="events.schemas">
+      <metrics statements="9" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="0" coveredmethods="0"/>
+      <file name="events.schema.ts" path="C:\Users\Jesús De Araujo\Desktop\Programacion Backend\Proyectos\e-ticket-platform\events-service\src\events\schemas\events.schema.ts">
+        <metrics statements="9" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="0" coveredmethods="0"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="2" count="3" type="stmt"/>
+        <line num="5" count="3" type="stmt"/>
+        <line num="7" count="3" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="13" count="3" type="cond" truecount="3" falsecount="1"/>
+        <line num="16" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

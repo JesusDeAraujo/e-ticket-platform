@@ -80,7 +80,12 @@
     },
     "collectCoverageFrom": [
       "**/*.service.(t|j)s",
-      "**/*.repository.(t|j)s"
+      "**/*.repository.(t|j)s",
+      "!**/*.main.(t|j)s",
+      "!**/*.module.(t|j)s",
+      "!**/*.dto.(t|j)s",
+      "!**/*.entity.(t|j)s",
+      "!**/*.filter.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
