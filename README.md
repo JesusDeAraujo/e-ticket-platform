@@ -26,11 +26,9 @@
 Para verificar las pruebas de cada servicio de manera independiente:
 ### Servicios Django (`auth-service`, `notifications-service`)
 
-cd <nombre-del-servicio>
 pytest --cov=. --cov-report=html
 
 ### Servicios NestJS (`api-gateway`, `events-service`, `reservations-service`)
 
-cd <nombre-del-servicio>
 npm run test:cov
 
