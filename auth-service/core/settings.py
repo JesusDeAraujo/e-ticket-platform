@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,17 @@ USE_TZ = True
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Auth Service API - E-Ticket Platform',
+    'DESCRIPTION': 'Servicio de Autenticación, Usuarios y emisión de Tokens JWT',
+    'VERSION': '1.0.0',
+    'SERVERS': [
+        {'url': 'http://localhost:3000/auth', 'description': 'API Gateway Proxy'},
+    ]
 }
 
 #TODO: pendiente la configuracion para establecer el tiempo de expiracion

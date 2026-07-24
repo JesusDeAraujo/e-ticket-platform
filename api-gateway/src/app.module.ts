@@ -34,15 +34,17 @@ export class AppModule implements NestModule {
 
     consumer
       .apply(
-        GatewayAuthMiddleware,
         createProxyMiddleware({
           target: reservationsUrl,
           changeOrigin: true,
-          on: {
-            proxyReq: fixRequestBody, 
-          },
-        })
+          on: { proxyReq: fixRequestBody },
+        }),
       )
-      .forRoutes('reservations' , 'reservations/*path');
+      .forRoutes('reservations', 'reservations/*path');
+
+    consumer
+      .apply(GatewayAuthMiddleware)
+      .exclude('reservations/api/docs-json')
+      .forRoutes('reservations', 'reservations/*path');
   }
 }

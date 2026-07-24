@@ -23,6 +23,24 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView
 )
 from users.views import RegisterView, UserView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from drf_spectacular.utils import extend_schema, extend_schema_view
+
+DecoratedTokenObtainPairView = extend_schema_view(
+    post=extend_schema(
+        summary="Iniciar sesión",
+        description="Autentica las credenciales del usuario y retorna los tokens JWT.",
+        tags=["Autenticación"],
+    )
+)(TokenObtainPairView)
+
+DecoratedTokenRefreshView = extend_schema_view(
+    post=extend_schema(
+        summary="Refrescar Token JWT",
+        description="Recibe un refresh token válido y genera un nuevo access token.",
+        tags=["Autenticación"],
+    )
+)(TokenRefreshView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +50,6 @@ urlpatterns = [
     path('api/register/', RegisterView.as_view(), name='auth_register'),
     path('api/me/', UserView.as_view(), name='user_me'),
     path('api/test-error/', test_error),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui')
 ]

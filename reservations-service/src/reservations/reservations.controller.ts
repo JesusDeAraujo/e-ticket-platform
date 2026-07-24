@@ -3,12 +3,17 @@ import { ReservationsService } from './reservations.service';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { EventPattern, Payload } from '@nestjs/microservices';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Reservations')
+@ApiBearerAuth()
 @Controller()
 export class ReservationsController {
   constructor(private readonly reservationsService: ReservationsService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Crear una nueva reserva de entradas' })
+  @ApiResponse({ status: 201, description: 'Reserva creada exitosamente.' })
   @UseGuards(JwtAuthGuard)
   async create(
     @Body() createReservationDto: CreateReservationDto,
@@ -18,6 +23,8 @@ export class ReservationsController {
     return this.reservationsService.create(createReservationDto, userId);
   }
 
+  @ApiOperation({ summary: 'Obtener reservas del usuario' })
+  @ApiResponse({ status: 200, description: 'Lista de reservas obtenida con éxito.' })
   @Get()
   @UseGuards(JwtAuthGuard)
   findAll() {
@@ -37,6 +44,8 @@ export class ReservationsController {
 
   //ENDPOINT TEMPORAL PARA PRUEBAS LOCALES
   @Post('seed-stock')
+  @ApiOperation({ summary: 'Poblar stock inicial para eventos' })
+  @ApiResponse({ status: 201, description: 'Stock de boletos inicializado correctamente.' })
   async seedStock(@Body() body: { eventId: string; stock: number }) {
     const { eventId, stock } = body;
     const entityManager = this.reservationsService['dataSource'].manager;
